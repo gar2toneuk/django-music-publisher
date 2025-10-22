@@ -206,7 +206,10 @@ class RoyaltyCalculation(object):
         csv_reader = csv.reader(self.file)
         work_ids = set()
         for row in csv_reader:
-            given_id = row[self.wc]
+            try:
+                given_id = row[self.wc]
+            except IndexError:
+                continue
             if self.work_id_source in ["ISWC", "ISRC"]:
                 given_id = given_id.replace(".", "").replace("-", "")
             work_ids.add(given_id)
@@ -309,24 +312,30 @@ class RoyaltyCalculation(object):
     def process_row(self, row):
         """Process one incoming row, yield multiple output rows."""
         # get the identifier and clean
-        given_id = row[self.wc]
-        if self.work_id_source in ["ISWC", "ISRC"]:
-            given_id = given_id.replace(".", "").replace("-", "")
+        try:
+            given_id = row[self.wc]
+            if self.work_id_source in ["ISWC", "ISRC"]:
+                given_id = given_id.replace(".", "").replace("-", "")
 
-        # get the work, if not found yield error
-        work = self.works.get(given_id)
+            # get the work, if not found yield error
+            work = self.works.get(given_id)
 
-        amount = Decimal(row[self.ac])
-        right = (self.right or row[self.rc][0]).lower()
-        share_split = {
-            "p": settings.PUBLISHING_AGREEMENT_PUBLISHER_PR,
-            "m": settings.PUBLISHING_AGREEMENT_PUBLISHER_MR,
-            "s": settings.PUBLISHING_AGREEMENT_PUBLISHER_SR,
-        }[right]
+            right = (self.right or row[self.rc][0]).lower()
+            share_split = {
+                "p": settings.PUBLISHING_AGREEMENT_PUBLISHER_PR,
+                "m": settings.PUBLISHING_AGREEMENT_PUBLISHER_MR,
+                "s": settings.PUBLISHING_AGREEMENT_PUBLISHER_SR,
+            }[right]
+            if self.algo == "share":
+                row.append({"p": "Perf.", "m": "Mech.", "s": "Sync"}[right])
+            try:
+                amount = Decimal(row[self.ac])
+            except (TypeError):
+                amount = None
+        except IndexError as e:
+            work = None
 
         # Add data to all output rows
-        if self.algo == "share":
-            row.append({"p": "Perf.", "m": "Mech.", "s": "Sync"}[right])
         if not work:
             row.append("")
             row.append("ERROR: Work not found")
@@ -351,14 +360,23 @@ class RoyaltyCalculation(object):
                 share = (relative_share / controlled).quantize(
                     Decimal(".000001")
                 )
-                amount_before_fee = amount * share
+                if amount is not None:
+                    amount_before_fee = amount * share
+                else:
+                    amount_before_fee = None
                 out_row.append("{0:.6f}".format(share))
                 out_row.append("{}".format(amount_before_fee))
                 fee = (line["fee"] or writer["fee"] or self.default_fee) / 100
                 out_row.append("{}".format(fee))
-                fee_amount = amount_before_fee * fee
+                if amount_before_fee is not None:
+                    fee_amount = amount_before_fee * fee
+                else:
+                    fee_amount = None
                 out_row.append("{}".format(fee_amount or "0"))
-                net_amount = amount_before_fee - fee_amount
+                if amount_before_fee is not None:
+                    net_amount = amount_before_fee - fee_amount
+                else:
+                    net_amount = None
                 out_row.append("{}".format(net_amount))
 
             elif self.algo == "share":
@@ -408,12 +426,16 @@ class RoyaltyCalculation(object):
         csv_writer = csv.writer(f)
         csv_writer.writerow(self.fieldnames)
         for row in csv_reader:
+            print(row)
             for out_row in self.process_row(row):
                 csv_writer.writerow(out_row)
+                print(out_row)
 
         f.filename = self.filename
-        f.close()
-        return f.name
+        try:
+            return f.name
+        finally:
+            f.close()
 
 
 class RoyaltyCalculationView(PermissionRequiredMixin, FormView):
@@ -449,5 +471,4 @@ class RoyaltyCalculationView(PermissionRequiredMixin, FormView):
         try:
             return FileResponse(f, filename=rc.filename, as_attachment=False)
         finally:
-            f.close()
             os.remove(path)
