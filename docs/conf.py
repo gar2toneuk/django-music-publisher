@@ -35,9 +35,7 @@ release = "24.7"
 rst_epilog = """
 .. |version| replace:: {}
 .. |release| replace:: {}
-""".format(
-    version, release
-)
+""".format(version, release)
 
 
 # -- General configuration ---------------------------------------------------
