@@ -1,6 +1,4 @@
-"""Filters used in parsing of CWR files.
-
-"""
+"""Filters used in parsing of CWR files."""
 
 from decimal import Decimal, ConversionSyntax, InvalidOperation
 

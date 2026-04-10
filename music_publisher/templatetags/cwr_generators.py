@@ -1,6 +1,4 @@
-"""Filters used in generation of CWR files.
-
-"""
+"""Filters used in generation of CWR files."""
 
 from decimal import Decimal, ROUND_HALF_UP
 

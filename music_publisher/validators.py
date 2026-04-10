@@ -13,7 +13,6 @@ from django.utils.deconstruct import deconstructible
 from .societies import SOCIETIES
 from decimal import Decimal
 
-
 TITLES_CHARS = re.escape(
     r"!\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`{}~£€"
 )

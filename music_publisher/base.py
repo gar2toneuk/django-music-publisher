@@ -1,5 +1,4 @@
-"""Contains base (abstract) classes used in :mod:`.models`
-"""
+"""Contains base (abstract) classes used in :mod:`.models`"""
 
 import base64
 import re
