@@ -2282,7 +2282,7 @@ class ModelsSimpleTest(TransactionTestCase):
                 cwr.filename, f"CW{current_year}0002DMP_0000_V3-0-0.SUB"
             )
             self.assertEqual(cwr.cwr.encode()[0:65], TEST_CONTENT[0:65])
-            self.assertEqual(cwr.cwr.encode()[167:], TEST_CONTENT[167:])
+            self.assertEqual(cwr.cwr.encode()[172:], TEST_CONTENT[172:])
             # should just return when once created
             num = cwr.num_in_year
             cwr.create_cwr()
@@ -2299,7 +2299,7 @@ class ModelsSimpleTest(TransactionTestCase):
                 cwr.filename, f"CW{current_year}0003DMP_0000_V3-0-0.ISR"
             )
             self.assertEqual(cwr.cwr.encode()[0:65], TEST_CONTENT[0:65])
-            self.assertEqual(cwr.cwr.encode()[167:], TEST_CONTENT[167:])
+            self.assertEqual(cwr.cwr.encode()[172:], TEST_CONTENT[172:])
 
         # raises error because this writer is controlled in a work
         writer.pr_society = None
