@@ -426,11 +426,9 @@ class RoyaltyCalculation(object):
         csv_writer = csv.writer(f)
         csv_writer.writerow(self.fieldnames)
         for row in csv_reader:
-            print(row)
             for out_row in self.process_row(row):
                 csv_writer.writerow(out_row)
-                print(out_row)
-
+            
         f.filename = self.filename
         try:
             return f.name
