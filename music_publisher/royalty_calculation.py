@@ -330,7 +330,7 @@ class RoyaltyCalculation(object):
                 row.append({"p": "Perf.", "m": "Mech.", "s": "Sync"}[right])
             try:
                 amount = Decimal(row[self.ac])
-            except (TypeError):
+            except TypeError:
                 amount = None
         except IndexError as e:
             work = None
@@ -428,7 +428,7 @@ class RoyaltyCalculation(object):
         for row in csv_reader:
             for out_row in self.process_row(row):
                 csv_writer.writerow(out_row)
-            
+
         f.filename = self.filename
         try:
             return f.name

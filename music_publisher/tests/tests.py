@@ -2171,9 +2171,7 @@ class ModelsSimpleTest(TransactionTestCase):
         wiw.clean()
 
         self.assertEqual(str(wiw), "MATIJA KOLARIC (*)")
-        self.assertEqual(
-            str(work), "DMP000001: MUSIC PUB CARTOONS (KOLARIC)"
-        )
+        self.assertEqual(str(work), "DMP000001: MUSIC PUB CARTOONS (KOLARIC)")
 
         music_publisher.models.WriterInWork.objects.create(
             work=work,
@@ -2333,6 +2331,7 @@ class ModelsSimpleTest(TransactionTestCase):
         self.assertEqual(
             cwr.filename, f"CW{current_year}0006DMP_0000_V3-1-0.SUB"
         )
+
 
 class OtherFunctionalTest(SimpleTestCase):
     """These tests are testing things not tested otherwise."""
