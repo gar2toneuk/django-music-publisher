@@ -43,7 +43,7 @@ Once you have registered, click on the next button to start the installation wiz
    :width: 100%
 
 
-2.2 Edit ``web`` environment variables. See `settings`_ for details. Click on **SAVE**!!
+2.2 Edit ``web`` environment variables. See `settings`_ for details.
 
 2.3 Select region closest to you.
 
@@ -106,7 +106,10 @@ Secret key
 -----------------------------------
 
 Django requires ``SECRET_KEY`` to be set. It can be any random string. You can use https://miniwebtool.com/django-secret-key-generator/
-to generate one, but do change it somewhat after pasting for complete security.
+to generate one, but do change it somewhat after pasting for complete security. Also make sure to encrypt it in the environment.
+
+.. image:: /images/installation_do_2.png
+   :width: 100%
 
 Publisher-related settings
 -----------------------------------
@@ -121,7 +124,7 @@ Publisher-related settings
 * ``PUBLISHER_SOCIETY_SR`` - Publisher's synchronization collecting society numeric code, rarely used
 
 For the list of codes, please have a look at societies.csv file in the music_publisher
-folder of the code repository.
+folder of the code repository, or at the end of this document (`Collective management organisations`_).
 
 Agreement-related settings
 -----------------------------------
