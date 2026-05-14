@@ -209,3 +209,4 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.BasicAuthentication",
     ]
 }
+CSRF_TRUSTED_ORIGINS = ["https://*.ondigitalocean.app", "ondigitalocean.app"]
